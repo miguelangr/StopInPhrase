@@ -1,0 +1,89 @@
+import pygame
+import time
+
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    paused = False  # Salir de la pausa cuando se presiona la tecla de espacio
+        time.sleep(0.1)  # Pequeña pausa para evitar consumo excesivo de CPU
+
+
+# Inicializar Pygame
+pygame.init()
+pygame.font.init()
+screen = pygame.display.set_mode((800, 600))
+background = (0, 0, 0)
+pygame.display.set_caption('Visualizador de Frases')
+
+# Configuración de fuentes
+myfont = pygame.font.Font(None, 35)
+pause_font = pygame.font.Font(None, 40)  # Para la pantalla de pausa
+current_font = myfont  # Fuente inicial
+
+# Definir arrays de frases
+frase_array1 = ['Frase 1 de array 1', 'Frase 2 de array 1', 'Frase 3 de array 1', 'Frase 4 de array 1']
+frase_array2 = ['Frase 1 de array 2', 'Frase 2 de array 2', 'Frase 3 de array 2', 'Frase 4 de array 2']
+frase_array3 = ['Frase 1 de array 3', 'Frase 2 de array 3', 'Frase 3 de array 3', 'Frase 4 de array 3']
+frase_array4 = ['Frase 1 de array 4', 'Frase 2 de array 4', 'Frase 3 de array 4', 'Frase 4 de array 4']
+
+# Índices y velocidades para cada frase
+index1, index2, index3, index4 = 0, 0, 0, 0
+speed1, speed2, speed3, speed4 = 1.0, 1.5, 2.0, 2.5  # Velocidades de rotación en segundos
+
+# Contadores de tiempo para cada frase
+last_update_time1, last_update_time2, last_update_time3, last_update_time4 = time.time(), time.time(), time.time(), time.time()
+
+# Bucle principal
+running = True
+while running:
+    screen.fill(background)
+
+    current_time = time.time()
+
+    # Actualizar y mostrar frase 1
+    if current_time - last_update_time1 > speed1:
+        index1 = (index1 + 1) % len(frase_array1)
+        last_update_time1 = current_time
+    frase1 = frase_array1[index1]
+
+    # Actualizar y mostrar frase 2
+    if current_time - last_update_time2 > speed2:
+        index2 = (index2 + 1) % len(frase_array2)
+        last_update_time2 = current_time
+    frase2 = frase_array2[index2]
+
+    # Actualizar y mostrar frase 3
+    if current_time - last_update_time3 > speed3:
+        index3 = (index3 + 1) % len(frase_array3)
+        last_update_time3 = current_time
+    frase3 = frase_array3[index3]
+
+    # Actualizar y mostrar frase 4
+    if current_time - last_update_time4 > speed4:
+        index4 = (index4 + 1) % len(frase_array4)
+        last_update_time4 = current_time
+    frase4 = frase_array4[index4]
+
+    # Lista de frases para mostrar en pantalla
+    frases_to_display = [frase1, frase2, frase3, frase4]
+    base_y = 150
+    spacing_y = 80
+    for i, frase in enumerate(frases_to_display):
+        frase_text = current_font.render(frase, True, (0, 255, 0))
+        screen.blit(frase_text, (100, base_y + (i * spacing_y)))
+
+    pygame.display.update()
+
+    # Manejo de eventos
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                pause()
+
+pygame.quit()
